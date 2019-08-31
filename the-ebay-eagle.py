@@ -1,11 +1,13 @@
 from ebaysdk.trading import Connection
 import json, xmltodict
 from collections import OrderedDict
+from collections import Counter
+import pandas as pd
 
 class TheEbayAsmund:
     def connect_and_execute(self):
         ''''''
-        self.api = Connection(config_file='ebay.yaml', domain='api.ebay.com', debug=False)
+        self.api = Connection(config_file='ebay.yaml', domain='api.sandbox.ebay.com', debug=False)
     def xmltojson(self, function):
         self.output_dict = json.loads(json.dumps(xmltodict.parse(function)))
     def list(self):
@@ -120,5 +122,28 @@ class TheEbayAsmund:
                         f"User ID: {self.seller_id} | Power Level Status: {self.SellerDashboard['PowerSellerStatus']['Level']}")
         except:
             print("EBAY ERROR: Either an error occured or you don't have access to seller dashboard which means you haven't opened an seller account.")
+    def get_messages(self):
+        self.connect_and_execute()
+        try:
+            self.api.execute('GetMemberMessages', {"MailMessageType": "All"})
+            self.xmltojson(self.api.response_content())
+        except Exception as e:
+            print(e)
+    def lists(self):
+        self.items = []
+        self.item_ids = []
+        self.prices = []
+    def get_my_ebayselling(self):
+        self.lists()
+        self.connect_and_execute()
+        self.api.execute('GetMyeBaySelling', {"ActiveList": True})
+        self.xmltojson(self.api.response_content())
+        for key in self.output_dict["GetMyeBaySellingResponse"]["ActiveList"]["ItemArray"]['Item']:
+            self.prices.append(f"${key['SellingStatus']['CurrentPrice']['#text']}")
+            self.item_ids.append(key["ItemID"])
+            self.items.append(key["Title"])
+        panda = {"Item": self.items, "Item ID": self.item_ids, "Price": self.prices}
+        dataframe = pd.DataFrame(data=panda)
+        dataframe.to_excel("test.xlsx")
 Ebay = TheEbayAsmund()
-Ebay.list()
+Ebay.get_my_ebayselling()
