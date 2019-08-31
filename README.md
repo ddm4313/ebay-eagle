@@ -8,3 +8,5 @@
 
 <h1> DEPENDACIES: ebaysdk & xmltodict</h1>
 <img src="https://i.imgur.com/fc0NrYp.png"> </img>
+<h1>
+<a href="https://github.com/ddm50/ebay-asmund/blob/master/LICENSE.md"> LICENSE </a>
