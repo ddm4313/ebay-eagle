@@ -1,6 +1,7 @@
 
 
 Simple Non Code License (SNCL)
+Copyright Ⓒ 2019 | ddm50
 
 The original creator of the data or text under this license is thereby called the licensor.
 
