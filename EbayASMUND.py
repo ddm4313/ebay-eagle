@@ -1,6 +1,7 @@
 from ebaysdk.trading import Connection
 import json, xmltodict
 from collections import OrderedDict
+# I will release this in the future as a module once I make sure every important function is included and it's stable.
 
 class TheEbayAsmund:
     def connect_and_execute(self):
