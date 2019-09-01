@@ -3,6 +3,21 @@ import json, xmltodict
 from collections import OrderedDict
 from collections import Counter
 import pandas as pd
+from colorama import Fore
+import colorama
+colorama.init()
+
+eagle = '''
+
+.___________. __    __   _______     _______ .______        ___   ____    ____     _______         ___           _______     __          _______ 
+|           ||  |  |  | |   ____|   |   ____||   _  \      /   \  \   \  /   /    |   ____|       /   \         /  _____|   |  |        |   ____|
+`---|  |----`|  |__|  | |  |__      |  |__   |  |_)  |    /  ^  \  \   \/   /     |  |__         /  ^  \       |  |  __     |  |        |  |__   
+    |  |     |   __   | |   __|     |   __|  |   _  <    /  /_\  \  \_    _/      |   __|       /  /_\  \      |  | |_ |    |  |        |   __|  
+    |  |     |  |  |  | |  |____    |  |____ |  |_)  |  /  _____  \   |  |        |  |____     /  _____  \     |  |__| |    |  `----.   |  |____ 
+    |__|     |__|  |__| |_______|   |_______||______/  /__/     \__\  |__|        |_______|   /__/     \__\     \______|    |_______|   |_______|
+                                                                                                                                                 
+'''
+print(Fore.BLUE + eagle + Fore.RESET)
 
 class TheEbayAsmund:
     def connect_and_execute(self):
@@ -125,15 +140,17 @@ class TheEbayAsmund:
     def get_messages(self):
         self.connect_and_execute()
         try:
-            self.api.execute('GetMemberMessages', {"MailMessageType": "All"})
+            self.api.execute('GetMemberMessages', {"MailMessageType": "All", "DetailLevel": "ReturnSummary"
+                                                   })
             self.xmltojson(self.api.response_content())
+            print(self.output_dict)
         except Exception as e:
             print(e)
     def lists(self):
         self.items = []
         self.item_ids = []
         self.prices = []
-    def get_my_ebayselling(self):
+    def get_allorders(self):
         self.lists()
         self.connect_and_execute()
         self.api.execute('GetMyeBaySelling', {"ActiveList": True})
@@ -145,5 +162,6 @@ class TheEbayAsmund:
         panda = {"Item": self.items, "Item ID": self.item_ids, "Price": self.prices}
         dataframe = pd.DataFrame(data=panda)
         dataframe.to_excel("test.xlsx")
+"""Here, we're calling a function, i.e get_allorders as stated below."""        
 Ebay = TheEbayAsmund()
-Ebay.get_my_ebayselling()
+Ebay.get_allorders()
